@@ -2,6 +2,15 @@
 
 Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwise as a game programmer.
 
+## Work log
+
+- 07 Nov 2026 : Module 1 complete. Created the project, a SoundBank and an Event, connected to Cube, and debugged a wrong Event name with the Profiler.
+- 10 Nov 2026 : Started Module 2.
+- 11 Nov 2026 : Modules 2 and 3 complete. Delayed Play actions (one game call, three timed sounds); Random Containers, Limit Repetition, randomised volume and pitch, sequences and silence.
+- 13 Nov 2026 : Module 4 complete. Switch Groups and Switch Containers (footsteps by surface).
+- 14 Nov 2026 : Modules 5 and 6 in progress. RTPCs and their control points; fixed heartbeat voice stacking with Stop then Play; used the Profiler to find which game object Map_Loaded is posted on.
+- 15 Nov 2026 : Reviewed and corrected these notes, and added a README.
+
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
@@ -79,49 +88,49 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   - Triggering sounds when levels load
   - Transition Times
 
-    ## Important: loops started by repeatable events
+## Important: loops started by repeatable events
 
-    - Make these loops idempotent. If a looping sound starts silent and only becomes audible through a Game Parameter (an RTPC), its start event MUST be safe to fire more than once.
-    - Example: Map_Loaded (our game event) starts the heartbeat, which is audible only when player health is low.
-      - Potential issue: Map_Loaded fires on every level load, so Play alone would stack heartbeat instances (voice stacking): two, then three heartbeats on top of each other.
-      - Fix: clear, then start. The Map_Loaded event first runs Stop on the heartbeat to remove any existing instance, then Play, so exactly one instance is ever playing.
+- Make these loops idempotent. If a looping sound starts silent and only becomes audible through a Game Parameter (an RTPC), its start event MUST be safe to fire more than once.
+- Example: Map_Loaded (our game event) starts the heartbeat, which is audible only when player health is low.
+  - Potential issue: Map_Loaded fires on every level load, so Play alone would stack heartbeat instances (voice stacking): two, then three heartbeats on top of each other.
+  - Fix: clear, then start. The Map_Loaded event first runs Stop on the heartbeat to remove any existing instance, then Play, so exactly one instance is ever playing.
 
-    ## Important: Wwise technical
+## Important: Wwise technical
 
-    - An Event's Actions run in the order listed.
-    - Thus: list Stop (heartbeat) first and Play (heartbeat) second.
-    - Insight: if the Stop has a fade-out time, the old and new heartbeat overlap for that fade.
+- An Event's Actions run in the order listed.
+- Thus: list Stop (heartbeat) first and Play (heartbeat) second.
+- Insight: if the Stop has a fade-out time, the old and new heartbeat overlap for that fade.
 
-    ## Very important: C++ vs Wwise objects
+## Very important: C++ vs Wwise objects
 
-    - **Object** (e.g. a Sound SFX or Random Container) = the blueprint you build in Wwise. Like a C++ class.
-    - **Instance** (a voice) = one copy of that object actually playing at runtime. Like an object created from the class.
-    - **Game object** = an ID the game registers with Wwise to say where sounds come from (an emitter). Sounds are posted ON a game object.
+- **Object** (e.g. a Sound SFX or Random Container) = the blueprint you build in Wwise. Like a C++ class.
+- **Instance** (a voice) = one copy of that object actually playing at runtime. Like an object created from the class.
+- **Game object** = an ID the game registers with Wwise to say where sounds come from (an emitter). Sounds are posted ON a game object.
 
-    ## Stop action scope
+## Stop action scope
 
-    - **Game object** (default): stops instances on the game object that posted the event.
-    - **Global**: stops instances on every game object.
-    - Use Global if the same event can be posted from different game objects.
-    - Why not Stop All?
-      - Stop All ends every sound in the game (music, ambience, UI).
-      - Use the narrowest action that fixes the problem.
+- **Game object** (default): stops instances on the game object that posted the event.
+- **Global**: stops instances on every game object.
+- Use Global if the same event can be posted from different game objects.
+- Why not Stop All?
+  - Stop All ends every sound in the game (music, ambience, UI).
+  - Use the narrowest action that fixes the problem.
 
-    ## "Posted on" a game object = the address, not the sender
+## "Posted on" a game object = the address, not the sender
 
-    - `PostEvent` names two things: **which event** and **which game object**.
-      - `AK::SoundEngine::PostEvent("Map_Loaded", LocalPlayerGameObjectID);`
-    - **Sender**: whichever code calls `PostEvent` (e.g. the level-loading code). It can live in any class.
-    - **Address**: the game object passed in. It decides where the sound plays and which values apply.
-    - So "posted on Local Player" does **not** mean the map loader lives in the player class.
-    - **Game object**: a registered ID plus name that the game gives Wwise; the sound's audio identity in the world.
-      - `AK::SoundEngine::RegisterGameObj(LocalPlayerGameObjectID, "Local Player");`
-      - Not the player class itself; usually stored as a member of it.
-    - **Why post the heartbeat on the player**
-      - **Position**: sounds follow their game object in 3D, and a heartbeat should come from the player.
-      - **RTPC values can be per game object**: a sound reads an RTPC from its own game object (or the global value). `Player_Health` set on Local Player only reaches sounds on Local Player.
-    - **How I found this (black-box investigation)**
-      - Profiler (`F6`), then Remote: connect to the game, then Start Capture, then reload the map.
-      - Capture Log: **Object Name** = which event (the blueprint); **Game Object** = where it was posted.
-      - Cube result: `Map_Loaded` is posted on **Local Player**, the same game object every load, so Stop with the default (game object) scope is enough.
-      - To check RTPC values per game object: the **Game Object Profiler**.
+- `PostEvent` names two things: **which event** and **which game object**.
+  - `AK::SoundEngine::PostEvent("Map_Loaded", LocalPlayerGameObjectID);`
+- **Sender**: whichever code calls `PostEvent` (e.g. the level-loading code). It can live in any class.
+- **Address**: the game object passed in. It decides where the sound plays and which values apply.
+- So "posted on Local Player" does **not** mean the map loader lives in the player class.
+- **Game object**: a registered ID plus name that the game gives Wwise; the sound's audio identity in the world.
+  - `AK::SoundEngine::RegisterGameObj(LocalPlayerGameObjectID, "Local Player");`
+  - Not the player class itself; usually stored as a member of it.
+- **Why post the heartbeat on the player**
+  - **Position**: sounds follow their game object in 3D, and a heartbeat should come from the player.
+  - **RTPC values can be per game object**: a sound reads an RTPC from its own game object (or the global value). `Player_Health` set on Local Player only reaches sounds on Local Player.
+- **How I found this (black-box investigation)**
+  - Profiler (`F6`), then Remote: connect to the game, then Start Capture, then reload the map.
+  - Capture Log: **Object Name** = which event (the blueprint); **Game Object** = where it was posted.
+  - Cube result: `Map_Loaded` is posted on **Local Player**, the same game object every load, so Stop with the default (game object) scope is enough.
+  - To check RTPC values per game object: the **Game Object Profiler**.
