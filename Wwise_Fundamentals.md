@@ -1,0 +1,127 @@
+# Wwise Fundamentals: My Notes
+
+Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwise as a game programmer.
+
+## Wwise shortcuts
+
+- Jump into the Project Explorer tree:
+  1. `Ctrl + F` (focus the Project Explorer)
+  2. `Shift + Tab` (cycle back into the selected tab's object tree)
+
+# Module 2: Using a single WAV file for multiple applications
+
+- Copying a Sound object creates a new object that points at the same WAV in Originals.
+  - The object is independent; only the audio file is shared.
+  - Like two pointers to one buffer: a *shallow copy* of the file, a deep copy of the settings.
+- Each Sound object has its own Source Editor.
+  - Thus trimming or fading in the Source Editor only changes that object.
+  - Edits are non-destructive: the original WAV on disk is never modified.
+- One game call via an Event can have multiple sounds.
+  - Why: an Event is a list of Actions (Play, Stop, Set State...), so one call from the game can trigger several sounds at once.
+
+# Module 3: Creating sonic variety with few resources
+
+- Random Container: a parent object that picks one of its children at random each time it is played.
+- Random Containers can remember the last N sounds they played and won't pick any of them next time (Limit Repetition).
+  - Example: a cannon shot has 3 primary sounds: A, B and C.
+    - Limit Repetition 1: the last sound is blocked, so A, B, A is allowed. The brain notices this pattern quickly.
+    - Limit Repetition 2: the last two sounds are blocked.
+    - Limit Repetition 3: not possible with 3 sounds. The maximum is (number of sounds - 1) = 2, or nothing would be left to pick.
+  - Insight: at the maximum (2 of 3), only one sound is ever eligible, so after the first picks it becomes a fixed cycle (e.g. A, C, B, A, C, B). Maximum repetition-avoidance quietly destroys randomness. More source sounds is the real fix.
+- In algorithmic terms, Limit Repetition keeps a queue of the last N sounds the Random Container played.
+  - Each pick is random, but only from the sounds not in the queue.
+  - After each pick, that sound joins the queue, and the oldest one leaves it.
+- TODO: Implement a toy simulation of this in C++.
+
+- Sequence Containers: play their children in a set order (the playlist).
+  - Step mode: each time the event fires, play the NEXT item only (e.g. footstep 1, then 2, then 3).
+  - Continuous mode: one event plays the whole playlist through, item after item.
+  - The items in the playlist are called playlist objects.
+  - An item can be a nested group of other sound objects.
+    - This can include a Random Container inside a Sequence Container (or the reverse). You can get creative.
+- Silence can be used (it's a built-in source plugin).
+  - Uses: a pause between items in a Sequence, or a child in a Random Container so that sometimes nothing plays (great for sparse ambience like birds).
+
+# Module 4: Using Switches
+
+- Game Syncs: information the game sends Wwise that changes how sounds behave.
+  - Events say WHAT to play; Game Syncs shape HOW it plays.
+  - The four kinds:
+    - **Switch**: a per-game-object choice (this character's floor surface: Grass, Wood, Metal).
+    - **State**: a global mode for the whole game (Exploring, Combat, Paused).
+    - **Game Parameter**: a number that varies continuously (Speed, Health).
+    - **Trigger**: a one-off cue, used by interactive music (e.g. play a stinger).
+- Switch Container: picks which child plays based on the current Switch value on the game object that posted the event.
+  - Each footstep checks its own character's surface.
+- Associate Switches with Switch Containers.
+
+# Module 5: Game Parameters
+
+- Real Time Parameter Control (RTPC): a curve that maps a Game Parameter (a number from the game) onto a sound property such as volume, pitch or filter.
+  - Game Parameter = the input; RTPC = the mapping.
+- Outcome: use Wwise's RTPC to control game audio during game runtime.
+- What I will learn:
+  - Importing .WAV files, looping sounds, changing sounds based on parameter values, auditioning RTPCs in graph view, and Transport Control.
+- Wwise definition: Game Parameters communicate a number within a defined range. This numerical range could be any range of numbers.
+  - They are floats. In the SDK, `SetRTPCValue` takes an `AkRtpcValue`, which is a float.
+  - You define the min and max; values outside the range are clamped.
+
+- Voice Low-pass Filter: removes high frequencies so the sound gets darker and more muffled.
+  - The 0 to 100 value is the amount of filtering: 0 = untouched, 100 = heavily muffled.
+  - Classic uses: sound behind a wall, underwater, or a low-health "tunnel" effect.
+
+# Module 6: Wwise's States
+
+- States: Wwise's States are generally used to make "sweeping" changes to the game's audio in response to a global change in the game.
+- Topics:
+  - Creating State Groups
+  - Auditioning State Groups in the Transport Control
+  - Triggering sounds when levels load
+  - Transition Times
+
+    ## Important: loops started by repeatable events
+
+    - Make these loops idempotent. If a looping sound starts silent and only becomes audible through a Game Parameter (an RTPC), its start event MUST be safe to fire more than once.
+    - Example: Map_Loaded (our game event) starts the heartbeat, which is audible only when player health is low.
+      - Potential issue: Map_Loaded fires on every level load, so Play alone would stack heartbeat instances (voice stacking): two, then three heartbeats on top of each other.
+      - Fix: clear, then start. The Map_Loaded event first runs Stop on the heartbeat to remove any existing instance, then Play, so exactly one instance is ever playing.
+
+    ## Important: Wwise technical
+
+    - An Event's Actions run in the order listed.
+    - Thus: list Stop (heartbeat) first and Play (heartbeat) second.
+    - Insight: if the Stop has a fade-out time, the old and new heartbeat overlap for that fade.
+
+    ## Very important: C++ vs Wwise objects
+
+    - **Object** (e.g. a Sound SFX or Random Container) = the blueprint you build in Wwise. Like a C++ class.
+    - **Instance** (a voice) = one copy of that object actually playing at runtime. Like an object created from the class.
+    - **Game object** = an ID the game registers with Wwise to say where sounds come from (an emitter). Sounds are posted ON a game object.
+
+    ## Stop action scope
+
+    - **Game object** (default): stops instances on the game object that posted the event.
+    - **Global**: stops instances on every game object.
+    - Use Global if the same event can be posted from different game objects.
+    - Why not Stop All?
+      - Stop All ends every sound in the game (music, ambience, UI).
+      - Use the narrowest action that fixes the problem.
+
+    ## "Posted on" a game object = the address, not the sender
+
+    - `PostEvent` names two things: **which event** and **which game object**.
+      - `AK::SoundEngine::PostEvent("Map_Loaded", LocalPlayerGameObjectID);`
+    - **Sender**: whichever code calls `PostEvent` (e.g. the level-loading code). It can live in any class.
+    - **Address**: the game object passed in. It decides where the sound plays and which values apply.
+    - So "posted on Local Player" does **not** mean the map loader lives in the player class.
+    - **Game object**: a registered ID plus name that the game gives Wwise; the sound's audio identity in the world.
+      - `AK::SoundEngine::RegisterGameObj(LocalPlayerGameObjectID, "Local Player");`
+      - Not the player class itself; usually stored as a member of it.
+    - **Why post the heartbeat on the player**
+      - **Position**: sounds follow their game object in 3D, and a heartbeat should come from the player.
+      - **RTPC values can be per game object**: a sound reads an RTPC from its own game object (or the global value). `Player_Health` set on Local Player only reaches sounds on Local Player.
+    - **How I found this (black-box investigation)**
+      - Profiler (`F6`), then Remote: connect to the game, then Start Capture, then reload the map.
+      - Capture Log: **Object Name** = which event (the blueprint); **Game Object** = where it was posted.
+      - Cube result: `Map_Loaded` is posted on **Local Player**, the same game object every load, so Stop with the default (game object) scope is enough.
+      - To check RTPC values per game object: the **Game Object Profiler**.
