@@ -1,4 +1,4 @@
-# Wwise Fundamentals: My Notes
+#oi Wwisy Fundamentals: My Notes
 
 Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwise as a game programmer.
 
@@ -8,8 +8,8 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
 - 10 Nov 2026 : Started Module 2.
 - 11 Nov 2026 : Modules 2 and 3 complete. Delayed Play actions (one game call, three timed sounds); Random Containers, Limit Repetition, randomised volume and pitch, sequences and silence.
 - 13 Nov 2026 : Module 4 complete. Switch Groups and Switch Containers (footsteps by surface).
-- 14 Nov 2026 : Modules 5 and 6 in progress. RTPCs and their control points; fixed heartbeat voice stacking with Stop then Play; used the Profiler to find which game object Map_Loaded is posted on.
-- 15 Nov 2026 : Reviewed and corrected these notes, and added a README.
+- 14 Nov 2026 : Modules 5 and 6 Completed. RTPCs and their control points; fixed heartbeat voice stacking with Stop then Play; used the Profiler to find which game object Map_Loaded is posted on.
+- 15 Nov 2026 : Module 7 Completed. Introduced to Profiler, Voice Monitor and Voice Profiler as techniques to debug issues. Reviewed and corrected these notes, and added a README.
 
 ## Wwise shortcuts
 
@@ -134,3 +134,24 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   - Capture Log: **Object Name** = which event (the blueprint); **Game Object** = where it was posted.
   - Cube result: `Map_Loaded` is posted on **Local Player**, the same game object every load, so Stop with the default (game object) scope is enough.
   - To check RTPC values per game object: the **Game Object Profiler**.
+
+# Module 7: Profiling Game Syncs
+
+- Outcome: Learn several techniques to debug issues.
+- What I will learn: 
+  - Rearranging Wwise Layout
+  - Using Voice Profiler to observe property values values
+  - Using Profiler layout to monitor game calls during gameplay
+- Reset Factory Layouts in Layouts top tab
+- Voice Profiler : F11 
+  - Voice Profiler Layout does not include Transport Control
+- Gear Button: Alt+G
+- Start Capture Alt+C
+- Voice monitor allows a graphical representation of dB over time.
+- Voice Inspector
+  - Left Side: Showcases the object, its ID with transport/soundcaster and what bus it routes to.
+  - Right Side: Showcases the Drivers which affect the objects filter values.
+- Layouts Designer - F5
+- Layouts Profiler - F6
+- Connect to Remote Platform - Shift + H
+  - Start Capture on Connect: Check when you want to profile at start of runtime.
