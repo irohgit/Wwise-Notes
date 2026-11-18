@@ -10,6 +10,7 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
 - 13 Nov 2026 : Module 4 complete. Switch Groups and Switch Containers (footsteps by surface).
 - 14 Nov 2026 : Modules 5 and 6 Completed. RTPCs and their control points; fixed heartbeat voice stacking with Stop then Play; used the Profiler to find which game object Map_Loaded is posted on.
 - 15 Nov 2026 : Module 7 Completed. Introduced to Profiler, Voice Monitor and Voice Profiler as techniques to debug issues. Reviewed and corrected these notes, and added a README.
+- 18 Nov 2026 : Module 8 Completed. Introduced to Attenuation. Utilizing distance to affect audio properties, e.g LPF and Volume. Introduced to Cone Attenuation, with angles and cone LPF.
 
 ## Wwise shortcuts
 
@@ -155,3 +156,36 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
 - Layouts Profiler - F6
 - Connect to Remote Platform - Shift + H
   - Start Capture on Connect: Check when you want to profile at start of runtime.
+
+# Module 8: Using 3D Spatialization
+
+- Outcome: Utilizing 3D spatialization to increase volume and frequency based on distance.
+- What I will learn:
+  - Attenuation Curves
+  - Cone attenuation allowing sounds to vary based on orientation with respect to the player as the listener.
+- Emitter: Anything that makes a sound
+- Listener: Usually associated with the main character in a first-person perspective game.
+- User Preferences: Shift + U
+- Emitters and Listeners are connected to game objects
+  - These game objects have Transform Coordinates: X,Y,Z
+  - It also has rotation information
+- The Transform and Rotation information is used by 3D Spatialization to create attenuation curves which compute things like volume and pan.
+- The combination of information and attentuation curves create the illusion of 3D space.
+- Attenuation curve ShareSet: A Resuable curve that can be applied to objects.
+- Speaker Panning: Default Value = 100 -> 3D Spatialized only. (In-Depth Module 10)
+- New Attentuation: Positioning > Attenuation > New 
+- Low Pass Filter: Applied to Distance
+- Cone attenuation to simulate perception of listener when the direct sound rotated away.
+  - Acoustics
+    - Models directivity: How a source's sound changes wiht the direction it faces relative to the listener.
+    - Front (inside Inne Angle, on-axis): No change
+    - Sides (between Inner and Outer Angle, off-axis): Gradual blend toward the back settings.
+    - Low Pass Filter (Cuts high frequences): High Frequencies move forward. Low frequencies diffract around the source.
+      - Thus, understanding acoustics allows understanding of the following:
+        - Listener is behind a source, the lower frequencies (bass) will still reach the listener. The treble (higher frequencies) move forward thus does not diffract (bounce around) to reach the listener.
+          - Therefore, knowing the physics of sound, we apply:
+            - The Low Pass Filter. To cut the higher frequencies if a listener is behind the teleporter.
+            - Sound Outcome of Teleporter: Hear it all when facing it. Hear only the bass when behind it or at its sides.
+  - Link to direct sound and reflections: facing away weakens the DIRECT sound, but REFLECTIONS still
+    arrive from the room, so the direct-to-reverberant ratio drops and the source sounds duller and further away.
+  - Distance attenuation = how FAR; cone attenuation = which way it FACES;
