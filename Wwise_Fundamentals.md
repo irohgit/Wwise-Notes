@@ -11,12 +11,33 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
 - 14 Nov 2026 : Modules 5 and 6 Completed. RTPCs and their control points; fixed heartbeat voice stacking with Stop then Play; used the Profiler to find which game object Map_Loaded is posted on.
 - 15 Nov 2026 : Module 7 Completed. Introduced to Profiler, Voice Monitor and Voice Profiler as techniques to debug issues. Reviewed and corrected these notes, and added a README.
 - 18 Nov 2026 : Module 8 Completed. Introduced to Attenuation. Utilizing distance to affect audio properties, e.g LPF and Volume. Introduced to Cone Attenuation, with angles and cone LPF.
-
+- 20 Nov 2026 : Module 9 Completed. 3D Position Automation Introduction.
+  Created a new attentuation object. 
+  3D Position Listener with Automation.
+  Created randomized pathing for object to follow and randomized the
+  selection of those paths.
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
   1. `Ctrl + F` (focus the Project Explorer)
   2. `Shift + Tab` (cycle back into the selected tab's object tree)
+- Audio Tab
+  - Random   Container: Ctrl + Shift + Alt + R
+    - Looks Like: 3x3 Grid
+  - Sequence Container: Ctrl + Shift + Alt + Q
+    - Looks Like: Hamburger icon
+  - Switch   Container: Ctrl + Shift + Alt + W
+    - Looks like Orders of Growth Piecewise Notation {             
+
+## Wwise Tabs
+- Audio     : Sounds
+- Events    : What the game can call via an agreed event string
+- GameSyncs : Switches, States, Game Parameters, Triggers
+- Soundbanks: What gets packaged for the game
+- ShareSets
+  Sessions  : Shares settings (i.e Object_Attentuation),
+              Soundcaster and Mixing Desk sessions
+
 
 # Module 2: Using a single WAV file for multiple applications
 
@@ -190,3 +211,27 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   - Link to direct sound and reflections: facing away weakens the DIRECT sound, but REFLECTIONS still
     arrive from the room, so the direct-to-reverberant ratio drops and the source sounds duller and further away.
   - Distance attenuation = how FAR; cone attenuation = which way it FACES;
+
+# Module 9: Using 3D Position Automation
+- Outcome: Use 3D Position Automation to place a sound that has
+           no game object in 3D space, by moving it along
+           designer-drawn paths relative to the listener,
+           with a random path chosen each time it plays.
+- What I will learn:
+  - Technique: 3D Position Automatio
+  - Creating predefined paths a sound can move along relative to the listener.
+  - Configure a sound for 3D spatialization
+  - Create a path
+  - Create more paths
+- Listener Relative Routing
+  - Enabled, 3D Spatialization : Position + Orientation
+- Attenuation 
+  - Set Attenuation: Object_Attenuation
+- 3D Position
+  - 3D Position: Listener with Automation
+    - 3D Automation - 3D Position Editor
+      - Useful for: Birds flying overhead, old building creaks and groans
+    - Allows us to define paths the sounds can move along in 3D space
+- Additional Control Points
+- Configure Timeline: Length Property
+
