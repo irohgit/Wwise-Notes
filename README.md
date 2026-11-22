@@ -18,6 +18,10 @@ Focus: understanding how sounds and music are authored in Wwise and integrated w
   - [x] Module 9: 3D Position Automation (20 Nov 2026)
   - [x] Module 10: Speaker Panning (21 Nov 2026)
   - [x] Module 11: Organizing with Actor-Mixers (21 Nov 2026)
+  - [x] Module 12: Understanding Master Audio Bug. Lesson Bug 
+  - [x] Module 13: Submixing with Additional Audio Busses (22 Nov 2026)
+  - [x] Module 14: Working with Effects (22 Nov 2026)
+  - [x] Module 15: Using Soundcaster Sessions (22 Nov 2026)
 - [ ] Wwise Interactive Music
 - [ ] Wwise Performance Optimization
 

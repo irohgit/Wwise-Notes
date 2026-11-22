@@ -24,6 +24,14 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   learn how to move a sound from L to R based on a changing value, such as
   the staff's actual position in game.
   Module 11 Completed. Organizing with Actor-Mixers.
+- 22 Nov 2026 : Module 12 Error. Lesson Bug. No teleporter in Voice Explorer.
+  Module 13 Completed. Created Environment, SFX and Music Bus. 
+  Nested SFX. Overrode Parent (Heartbeat Object). Used schematic view.
+  Module 14 Completed. Add Delay Effect to teleport. Create Auxiliary Bus.
+  Add RoomVerb Effect to create reverb within Auxiliary Bus for Main Character.
+  Went into Secondary editor to edit RoomVerb values. Looked at env ID.
+  Module 15 Completed: Create Soundcaster Sessions. Group Objects.
+  Simultaneous play.
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
@@ -36,8 +44,18 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
     - Looks Like: Hamburger icon
   - Switch   Container: Ctrl + Shift + Alt + W
     - Looks like Orders of Growth Piecewise Notation {             
+  - Auxiliary Bus: Ctrl + Shift + Alt + L
 - New Parent
   - Actor-Mixer : Ctrl + Alt + A 
+  - Master-Mixer :
+    - Audio Bus: Ctrl + Shift + Alt + B
+- Layouts:
+  - Designer       : F5
+  - Schematic      : F9
+  - Voice Profiler : F11
+- View Settings: Ctrl + Alt + H
+- Views
+  - Soundcaster : Shift + S
 ## Wwise Tabs
 - Audio     : Sounds
 - Events    : What the game can call via an agreed event string
@@ -262,3 +280,73 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   - Group Objects in Actor-Mixers, Colour-Coding Objects
 - Color Coded Actor-Mixers, and Grouped Them
 
+# Module 12: Understanding the Master Audio Bus
+- Outcome: Utilize Master-Mixer Hierarchy 
+- What will I Learn:
+  - Explore the Master Audio Bus
+  - Adjust voice volumes
+  - Checking which bus an object is routed to
+  - Using Voice Profiler to determine the final volume of sounds
+- Bus: Where multiple audio signals are mixed together to form a single audio
+       signal.
+  -Only exist in Master-Mixer Hierarchy
+- Master Bus
+- Nested objects have their numeric properties, like voice volume, offset by the corresponding of it's parented objects.
+  - Voice Volume(-5) will play at a volume (-7) if its a child of an Actor-Mixer that has a Voice Volume of (-2).
+- Lesson Bug - Cannot find Teleporter in Voice Explorer
+
+# Module 13: Submixing with Additional Audio Busses
+- Outcome: Create several busses, nested and unnested for different game audio.
+- What Will I Learn:
+  - Nesting Audio Busses
+  - Create audio busses: Environment, Music, SFX
+  - Assign objects to busses
+  - Use the Schematic View
+  - Routing objects to busses
+  - Using the Multi Editor
+  - Overriding parent output bus assignments
+  - Using the Schematic View 
+
+# Module 14: Working with Effects
+- Outcome: Add a Delay Effect and RoomVerb Effect.
+- What Will I Learn
+ - Insert an Effect on a Sound SFX
+ - Insert an Effect on a bus
+ - Creating Auxiliary Busses.
+ - Configure Auxiliary Sends
+ - Overriding a parent Effect.
+- By Default: Sound Objects inherit the Effects configured for its parent.
+- Thus to override the default, check the `Override Parent` box.
+- Check `Render` <-- Why? Not explained [?]
+- Configure Auxiliary Sends
+ -  Method One: User-Defind Method
+ -  Method Two: Game sends messages to Wwise indicating which auxiliary bus a
+    sound should be sent to and at which level. (Ensure no other send conflict)
+    More Options: None
+    - Game-Defined Auxiliary Sends
+      - ID number of enviornment is also sent to Wwise
+- Via Master-Mixer Hierarchy: Click secondary Editor's Effect `RoomVerb`
+  to edit settings
+
+# Module 15: Using Soundcaster
+- Outcome: Use Soundcaster to arrange multiple instances of Transport control.
+  These instances will target specific objects so I can play many different
+  objects at the same time.
+- What will I learn:
+ - Create a Soundcaster Session
+ - Add objects to a Soundcaster Session
+ - Create another Soundcaster Session
+ - Adjust some object properties without leaving Soundcaster view
+   - Volume, Pitch , LPF
+- First : Decide a preset layout of objects I want to have quick access to.
+- This preset is the Soundcaster Session.
+- Soundcaster sessions are not limited.
+- Limits to Soundcaster Session:
+  You cannot add bus objects to a Soundcaster Session. They cannot be played
+  in the Transport Control.
+- Events Tab: SearchField -> player
+- Default Behaviour of Soundcaster: Only displays Game Syncs that correspond
+  with the objects you've loaded. You can force Game Syncs to appear by 
+  selecting the Show All buttons next to each Game Sync header.
+- Event Objects: Don't contain properties for Volume, Pitch, and LPF
+- Audio Objects: Do have properties thus Vol, Pitch and LPF can be edited.
