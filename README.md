@@ -16,6 +16,8 @@ Focus: understanding how sounds and music are authored in Wwise and integrated w
   - [x] Module 7: Profiling Game Syncs (15 Nov 2026)
   - [x] Module 8: Using 3D Spatialization (18 Nov 2026)
   - [x] Module 9: 3D Position Automation (20 Nov 2026)
+  - [x] Module 10: Speaker Panning (21 Nov 2026)
+  - [x] Module 11: Organizing with Actor-Mixers (21 Nov 2026)
 - [ ] Wwise Interactive Music
 - [ ] Wwise Performance Optimization
 

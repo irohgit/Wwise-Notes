@@ -16,6 +16,14 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   3D Position Listener with Automation.
   Created randomized pathing for object to follow and randomized the
   selection of those paths.
+- 21 Nov 2026 : Module 10 Completed. Speaker Panning: Grouped ...
+  Gem_Recharge_Woosh and Gem_Recharge_Magic under a Staff Recharge ...
+  Actor-Mixer, set Speaker Panning to Balance-Fade, and placed it to the
+  right of the listener (X: 60, Y: 0) so the staff recharge is heard from
+  the right. Note: This was a fixed, single-position exercise. Next, I want to
+  learn how to move a sound from L to R based on a changing value, such as
+  the staff's actual position in game.
+  Module 11 Completed. Organizing with Actor-Mixers.
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
@@ -28,7 +36,8 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
     - Looks Like: Hamburger icon
   - Switch   Container: Ctrl + Shift + Alt + W
     - Looks like Orders of Growth Piecewise Notation {             
-
+- New Parent
+  - Actor-Mixer : Ctrl + Alt + A 
 ## Wwise Tabs
 - Audio     : Sounds
 - Events    : What the game can call via an agreed event string
@@ -234,4 +243,22 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
     - Allows us to define paths the sounds can move along in 3D space
 - Additional Control Points
 - Configure Timeline: Length Property
+
+# Module 10: Using Speaker Panning
+- Outcome: Use panning techniques to make wizard recharge action, be heard on the left and right speakers.
+- What I will learn:
+  - Technique: Speaker Panning
+  - Positioning sounds at a fixed point relative to the listener.
+- Position: Speaker Panning -> Balance-Fade 
+  - Direct Assignment: Source channels of sound played through the front LR.
+  - Balance-Fade: Volume is balanced.
+    - Sound heard through Front & Rear speakers via Surround Sound Playback ENV.
+- Note: I thought this would be a RTPC so that it would fade from L to R
+  -TODO: If future tutorials do not teach this. Find out how.
+
+# Module 11: Organizing with Actor-Mixers
+- Outcome: Organizing several thousand sounds within a Wwise Project.
+- What I Will Learn:
+  - Group Objects in Actor-Mixers, Colour-Coding Objects
+- Color Coded Actor-Mixers, and Grouped Them
 
