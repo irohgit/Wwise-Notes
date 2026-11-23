@@ -23,6 +23,8 @@ Focus: understanding how sounds and music are authored in Wwise and integrated w
   - [x] Module 14: Working with Effects (22 Nov 2026)
   - [x] Module 15: Using Soundcaster Sessions (22 Nov 2026)
   - [x] Module 16: Configuring a Mixing Desk (23 Nov 2026)
+  - [?] Module 17: TODO: Borrow MIDI control to do module. Free V MIDI ? 
+  - [x] Module 18: Working with Multiple SoundBanks (23 Nov 2026)
 - [ ] Wwise Interactive Music
 - [ ] Wwise Performance Optimization
 

@@ -34,7 +34,9 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   Simultaneous play.
 - 23 Nov 2026 : Module 16 Completed. Created mixing desk. Ducking music
   when signals are received by another bus. Create different mixes using states.
-
+  Module 17: Cannot Complete until MIDI is borrowed.
+  Module 18 Completed. Created SoundBank for specific Level. Generated checked.
+  Fixed Pathing.
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
@@ -54,6 +56,7 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
     - Audio Bus: Ctrl + Shift + Alt + B
 - Layouts:
   - Designer       : F5
+  - SoundBank      : F7
   - Mixer          : F8
   - Schematic      : F9
   - Voice Profiler : F11
@@ -388,3 +391,42 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
     the state you want to edit. Then go back into mixer to edit.
 - Push States button will reflect values changed in the mixing desk
   to the Soundcaster and Transport Control
+
+# Module 17: Using Control Surfaces
+- Note: TODO - Borrow MIDI 
+- Outcome: Use an external MIDI device to control adjust multiple 
+  parameters.
+- What I Will Learn:
+
+# Module 18: Working with Multiple SoundBanks
+- Outcome: Make the content of the project a permanent part of the game.
+  By creating, populating, and generating SoundBanks.
+- What I Will Learn:
+  - Create a level-specific SoundBank
+  - Add Events to SoundBanks
+  - Generate SoundBanks
+- Connecting Wwise to the game via Remote Connection will allow changes to be
+  reflected immediately.
+- Now we will use/generate SoundBanks.
+- Manage Memory Efficiently:
+  - Sounds that are used in particular levels can be grouped in SoundBanks
+    accordingly.
+  - An Example:
+    - Wwise - Module 18.proj has the Actor-Mixer object `Map Voices`
+      The objects within are only heard in the level `dcp_the_core`.
+      Thus, the sounds will not load until the level runs and uses the 
+      related SoundBank.
+- Ensure the correct operating system is selected
+  - Above Projected Explorer Left Drop Down: 
+- Data Size Column in User-Defined SoundBanks is important to know space cost.
+- Event Viewer: Default Layout -> Bottom Left
+  Shows all the Events
+- SoundBankEditor is in the Secondary Window
+- Adding an Event to the Same SounBank will not duplicate the Event.
+- `IMPORTANT`!!
+  - Generating Checked objects to make a SoundBank will create a
+    Generation Log. This provides warnings, messages, parameters etc.
+    Use this to debug.
+  - Ensure the build path is in the `GAME'S` project folder.
+  - SHIFT + K to access project settings and then click SoundBanks Tab
+    To change Windows Path to Desired
