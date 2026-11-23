@@ -32,6 +32,9 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   Went into Secondary editor to edit RoomVerb values. Looked at env ID.
   Module 15 Completed: Create Soundcaster Sessions. Group Objects.
   Simultaneous play.
+- 23 Nov 2026 : Module 16 Completed. Created mixing desk. Ducking music
+  when signals are received by another bus. Create different mixes using states.
+
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
@@ -51,6 +54,7 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
     - Audio Bus: Ctrl + Shift + Alt + B
 - Layouts:
   - Designer       : F5
+  - Mixer          : F8
   - Schematic      : F9
   - Voice Profiler : F11
 - View Settings: Ctrl + Alt + H
@@ -350,3 +354,37 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   selecting the Show All buttons next to each Game Sync header.
 - Event Objects: Don't contain properties for Volume, Pitch, and LPF
 - Audio Objects: Do have properties thus Vol, Pitch and LPF can be edited.
+
+# Module 16: Configuring a Mixing Desk
+- Outcome: Use one view, the Mixing Desk, to group several audio properties
+  and fine-tune them. 
+- What I Will Learn: Use Mixing Desk alongside the Soundcaster view.
+  - Creating Mixing Desk sessions
+  - Adding objects to Mixing Desk sessions
+  - Ducking Busses
+  - Working with States in the Mixing Desk
+- Mixing Desk Sessions: Act as presets for objects you want to have mixing
+  channels for.
+- Drag and Drop Objects into Mixing Desk to reveal vertical mixer strips.
+- Ducking: Select Bus > Auto-ducking > Add Bus to Ducking List > Select Bus OK
+- Fade In & Fade Out: Determines lenght of time that passes between the moment
+  a signal is detected on the bus, and the act of modifying the target bus.
+- Target Property Column: Where is the change being applied.
+- Testing Mixing Changes
+  - Create new Mixing Desk - Bus Masters
+  - Put in all busses so that you can see the bus Meter's
+  - Play a sound
+  - You can see the changes in the desired bus
+    - In our example: Music was ducked by making its volume -9
+      whenever a signal went through the Environmental bus
+    - You can see a literal orange duck
+- Work with States
+  - Example 1: Wizard Defeated State -> Environmental sounds quieter
+    Music unaffected
+- Clicking on a header of a bus in the mixing desk
+  - Opens itself as a floating window
+- Editing States Area: Will display States once you 
+  - Double click the Bus you want and go into the `STATES` tab and choose
+    the state you want to edit. Then go back into mixer to edit.
+- Push States button will reflect values changed in the mixing desk
+  to the Soundcaster and Transport Control
