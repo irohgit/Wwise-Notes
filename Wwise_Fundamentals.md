@@ -37,6 +37,9 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   Module 17: Cannot Complete until MIDI is borrowed.
   Module 18 Completed. Created SoundBank for specific Level. Generated checked.
   Fixed Pathing.
+- 24 Nov 2026 : Module 19 Completed. Brought both SoundBanks within memory
+  budget. Utilizing 3 techniques, Conversion, Exclusion and Streaming.
+
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
@@ -63,6 +66,7 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
 - View Settings: Ctrl + Alt + H
 - Views
   - Soundcaster : Shift + S
+
 ## Wwise Tabs
 - Audio     : Sounds
 - Events    : What the game can call via an agreed event string
@@ -430,3 +434,91 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   - Ensure the build path is in the `GAME'S` project folder.
   - SHIFT + K to access project settings and then click SoundBanks Tab
     To change Windows Path to Desired
+
+# Module 19: Managing SoundBank size
+- Outcome: Reducing size SoundBanks to ensure Audio meet design spec.
+- What I Will Learn:
+  - Considering Memory and also SoundBanks
+  - Generating Soundbanks
+  - Configuring the maximum size of SoundBanks
+  - Creating Conversion Settings ShareSets  
+  - Applying Conversion Settings
+  - Playing converted audio
+  - Excluding objects from your SoundBanks
+  - Streaming Audio
+- SoundDesign:
+  - Memory Budget: Expressed in bytes
+- SoundBank Generation:
+  - Using SoundBank Settings from: Project Settings
+  - Using External Sources output paths from: Project Settings
+  - Using SoundBank paths from: Project Settings
+  - Using Source Control for Generates Files: False
+  - External Sources output path: C:${MY_WWISE_19_PROJECTPATH}
+  - SoundBanks output path: C:${MY_GAME_PROJECTPATH}
+  - Root output path: C:${GAME_PROJECT_SRC_OUTPUT_PATH} 
+- SoundBank Manager : Assign a maximum size.
+- Data Size is Red = Exceed memory budget.
+- Free Space: Negative means how much the Data needs to reduce by. 
+- Conversion is an umbrella term for turning original imported audio
+  into the version the game acutally ships with.
+  Original files are untouched.
+  Wwise produces a converted copy for each platform.
+- Transport Control: Play Originals vs Play Converted
+- Change: VORBIS MP3        ; Permanent Dataloss     ; Lossy Compression
+- Change: PCM               ; Non-Permanent Dataloss ; No, uncompressed
+- Change: Lower Sample Rate ; Permanent Dataloss     ; Downsampling
+- Change: Stereo to Mono    ; Permanent Dataloss     ; Downmixing
+- Technique Convert Audio
+  - Reduce: Sample Rate, Channels - Downmix to mono, filetype conversion.
+  - Usually results in a reduciton in sound quality. 
+    - An engineering compromise.
+  - `!!!__IMPORTANT__!!!` 
+    - In Wwise, conversion does not need to occur during import process.
+      It may be delayed until design nears completion, and then doing conversions if necessary and to the extent necessary.
+  - Conversion Settings: ShareSet
+    Propert Editor > 
+                   Conversion >
+                              Conversion Settings More Options >
+                                                               New
+  - Conversion Center
+    Upper Pane: Conversion parameters applied to all objects assigned to 
+                this shareset.
+    Lower Pane: Displays list of currently assigned objects to shareset.
+                Details about the audio files e.g channels, sample rate, 
+                    original file size.
+  - Converting Stereo Channels: To Mono or Lowering Sample Rate ...
+        Can reduce file size but will create obvious changes to the audio sound.
+- Default Wwise Setting: `!!!___IMPORTANT___!!!` 
+      Audio imported into Wwise is typically a PCM file.
+      Thus no data compression has been applied.
+- Game Engine: Audio System
+  - Files that are compressed means the game system must decompress to play it.
+  - This adds additional load on system's processor.
+  - Cost Benefit is Reduction of Cost of Processer Usage vs Benefit of File
+    Size Reduction
+- Default Wwise Functionality: 
+  - Wwise does not provide MP3 comrpession.
+  - Vorbis compression is provided: It is similar
+        The industry standard in game audio integration.
+        This compression is said to sound better by many.
+- In ShareSets Conversion Settings:
+     The SFX share set is selected.
+     In the Upper Pane, the Format is changed to vorbis.
+     Click the correct Plaform and press Convert.
+- Technique 2 : Exclude Audio - Don't delete, just exclude from SoundBank.
+  - Go into the Actor-Mixer Hierarchy 
+    Uncheck the Sound Objects
+    They wont be generated.
+- Technique 2 : Streaming Audio
+  - Load part of audio file into game system's RAM at one time.
+  - Direct way to play audio directly from stored memory, SSD, NVME, HDD.
+  - Effective for large audio files, such as music that is several minutes long.
+  - Cons: Latency as system needs to retrieve from storage.
+          Ok for BGM, maybe not for things like projectiles.
+          Limits to streaming bandwidth:
+              [?]: What is this at at the hardware level? 
+                   What lane is the audio streaming competing with
+                   The tutorial says video could compete
+  - Property Editor >
+                    Sound SFX >
+                              Stream_Group : Check Enable
