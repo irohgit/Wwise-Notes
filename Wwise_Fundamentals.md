@@ -23,8 +23,7 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   the right. Note: This was a fixed, single-position exercise. Next, I want to
   learn how to move a sound from L to R based on a changing value, such as
   the staff's actual position in game.
-  Module 11 Completed. Organizing with Actor-Mixers.
-- 22 Nov 2026 : Module 12 Error. Lesson Bug. No teleporter in Voice Explorer.
+  Module 11 Completed. Organizing with Actor-Mixers.- 22 Nov 2026 : Module 12 Error. Lesson Bug. No teleporter in Voice Explorer.
   Module 13 Completed. Created Environment, SFX and Music Bus. 
   Nested SFX. Overrode Parent (Heartbeat Object). Used schematic view.
   Module 14 Completed. Add Delay Effect to teleport. Create Auxiliary Bus.
@@ -39,19 +38,25 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   Fixed Pathing.
 - 24 Nov 2026 : Module 19 Completed. Brought both SoundBanks within memory
   budget. Utilizing 3 techniques, Conversion, Exclusion and Streaming.
+- 25 Nov 2026 : 
+  Fundamentals course Completed.
+  Module 20 Completed: Utilizing multiple techniques to ensure project
+  stays within memory and processing budget.
+  Virtual Voice Culling: Based on Volume Threshold and Max Voice Instances
+  Prioritization based on OffsetPriority, Attenuation.
+
 
 ## Wwise shortcuts
 
 - Jump into the Project Explorer tree:
   1. `Ctrl + F` (focus the Project Explorer)
   2. `Shift + Tab` (cycle back into the selected tab's object tree)
+- Project
+  - Platform Manager : Shift + Alt + P 
 - Audio Tab
-  - Random   Container: Ctrl + Shift + Alt + R
-    - Looks Like: 3x3 Grid
-  - Sequence Container: Ctrl + Shift + Alt + Q
-    - Looks Like: Hamburger icon
-  - Switch   Container: Ctrl + Shift + Alt + W
-    - Looks like Orders of Growth Piecewise Notation {             
+  - Random   Container: Ctrl + Shift + Alt + R  Looks Like: 3x3 Grid
+  - Sequence Container: Ctrl + Shift + Alt + Q  Looks Like: Hamburger icon
+  - Switch   Container: Ctrl + Shift + Alt + W  Looks like {             
   - Auxiliary Bus: Ctrl + Shift + Alt + L
 - New Parent
   - Actor-Mixer : Ctrl + Alt + A 
@@ -522,3 +527,71 @@ Notes from Audiokinetic's Wwise Fundamentals course, written while learning Wwis
   - Property Editor >
                     Sound SFX >
                               Stream_Group : Check Enable
+
+# Module 20: Optimizing your sound design
+- Outcome: Understand the processing power required for the project's sound
+           design. Ensuring platform compliance. Familiarity with demand.
+           Adding Constraints. Assigning priorities.
+- What I Will Learn:
+  - Profiling games
+  - Filtering data in Capture Log.
+  - Defining a volume threshold per platform.
+  - Defining the maximum number of voices per platform
+  - Limiting sound instances
+  - Defining playback priorities
+- Sound and Computer System Architecture
+  - Every time a sound is played in game, processing power is required from
+    the processor.
+  - Every sound played in a game requires something called a voice through which
+    the sound is played. `not to be confused with Sound Voice Object` for
+    dialogue.
+ - Using Profiler:
+   -Panes
+    - Performance Monitor
+      - Description Name & Value
+      - CPU - Total: In %
+      - Number of Voices (Physical)
+      - Number of Voices (Total)
+      - Output Peak: Decibels
+    - Advanced Profiler: Multiple Tabs
+      - Some interesting ones: Busses, Sends, Emitter Listener,
+            Memory, Memory Areans, CUP, Obs/Occ(occlusion?)
+- Technique 1: Virtal Voice - Distance culling / Similar to light and graphics
+  - Idea: Define a volume threshold that sounds must reach before it is able
+          to be rendered through a voice.
+  - Sounds that become silent due
+    - A higher Volume Threshold or 
+    - Max Voice Instance reduction
+    Is referred to as a virtual voice.
+- Platform manager allows independent configuration for game platforms.
+    - Default Wwise Setting Volume Threshold: -80db. 
+    - Raising this may cut off subtle ambience.
+    - Max Voice Instances: Maximum number of `voices` that are allowed
+    to play at one time. Lowering this value will mean less processing power.
+    - An important consideration is that, having max voice instances may
+      cut off voices. Some of these voices may be cut off similar to
+      flapjack where my own cannon got cut off.
+- Virtual Voicing: Poison Gem Example
+  - Actor-Mixer > Default Work Unit > PoisonGemMagic-Mixer
+  - Property Editer: Playback Limit Group
+    - Limit Sound Instances - Checked
+    - Limitation Scope: Globally
+      A global setting will mean only 4 can ever occur at once.
+      `This was a potential solution to hearing 1000 pirate enemy projectiles`
+- `PRIORITIZING SOUNDS`
+  - Sounds can be given a priority depending on their importance
+    in relation to the player's experience.
+  - The sound engine will only cull non-essential sounds.
+  - And leave essential sounds like player dialogue or music alone.
+  - `!!!__IMPORTANT__!!!` 
+    Playback Priority: Priority Parameter MAX value is 100.
+  - Distance Based Attenuation and Prioritization:
+    - Advanced: Playback Priority Group > Use Offset Priority
+    - USE OFFSET PRIORITY : Specifies a value by which the priority 
+      of an object is offset when it reaches the `Max distance` value 
+      specified in the Attenuation editor.
+      - `VERY HELPFUL WHEN`: Footsteps are high priority when close to the
+        listener and low priority when they are far away.
+
+
+  

@@ -6,7 +6,7 @@ Focus: understanding how sounds and music are authored in Wwise and integrated w
 
 ## Progress
 
-- [ ] Wwise Fundamentals (in progress): [Wwise_Fundamentals.md](Wwise_Fundamentals.md)
+- [x] Wwise Fundamentals COMPLETED : [Wwise_Fundamentals.md](Wwise_Fundamentals.md)
   - [x] Module 1: First project, SoundBank and Event, debugged with the Profiler (07 Nov 2026)
   - [x] Module 2: Using a single WAV file for multiple applications (11 Nov 2026)
   - [x] Module 3: Creating sonic variety with few resources (11 Nov 2026)
@@ -26,11 +26,19 @@ Focus: understanding how sounds and music are authored in Wwise and integrated w
   - [?] Module 17: TODO: Borrow MIDI control to do module. Free V MIDI ? 
   - [x] Module 18: Working with Multiple SoundBanks (23 Nov 2026)
   - [x] Module 19: Managing SoundBank size. (24 Nov 2026)
+  - [x] Module 20: Optimizing your sound design. (25 Nov 2026)
 - [ ] Wwise Interactive Music
 - [ ] Wwise Performance Optimization
 
 ## Highlights
 
-- **Limit Repetition as a queue**: how Random Containers avoid repeats, and why the maximum setting turns randomness into a fixed cycle.
-- **Voice stacking**: making a looping sound's start event safe to fire more than once (Stop, then Play).
-- **"Posted on" a game object**: the game object is the sound's address, not the code that sent it, confirmed with the Profiler.
+- **Limit Repetition as a queue**: how Random Containers avoid repeats, and 
+    why the maximum setting turns randomness into a fixed cycle.
+- **Voice stacking**: making a looping sound's start event safe to fire more 
+    than once (Stop, then Play).
+- **"Posted on" a game object**: the game object is the sound's address, not 
+    the code that sent it, confirmed with the Profiler.
+- ** Utilizing performance optimization techniques that can were solutions
+    to Flapjack's concurrency issues.
+    Virtual Voice Culling based on Volume Threshold and Max Voice Instances.
+    Voice Prioritization on Sound Objects using an Offset for Attenuation. 
